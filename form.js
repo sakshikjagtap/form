@@ -2,36 +2,9 @@
 /* eslint-disable no-console */
 const fs = require('fs');
 
-class Form {
-  #queries;
-  #details;
-  constructor() {
-    this.#queries = [
-      'Please enter the name',
-      'Please enter the DOB',
-      'Please enter the hobbies',
-      'Please enter phone number'
-    ];
-    this.#details = { name: null, DOB: null, hobbies: [], phNo: null };
-  }
-
-  getQueries() {
-    return this.#queries;
-  }
-
-  getKeys() {
-    return Object.keys(this.#details);
-  }
-
-  setValues(key, value) {
-    this.#details[key] = value;
-  }
-
-  write() {
-    fs.writeFileSync('./form.json', JSON.stringify(this.#details));
-  }
-
-}
+const writeFile = (details) => {
+  fs.writeFileSync('./form.json', JSON.stringify(details));
+};
 
 const validateName = (name) => {
   const reg = /^[a-z]{4,}/;
@@ -39,7 +12,7 @@ const validateName = (name) => {
 };
 
 const validateDOB = (birthDate) => {
-  const reg = /[1-9]{4}-[1-9]{2}-[1-9]{2}/;
+  const reg = /[1-9]{2}-[1-9]{2}-[1-9]{2}/;
   return reg.test(birthDate);
 };
 
@@ -47,30 +20,21 @@ const validateHobbies = (hobbies) => /..*/.test(hobbies);
 
 const validatePhoneNumber = (phoneNumber) => /\d{10}/.test(phoneNumber);
 
-const allValidations = () => {
-  return {
-    name: validateName,
-    DOB: validateDOB,
-    hobbies: validateHobbies,
-    phNo: validatePhoneNumber
-  };
-};
-
-const input = (form) => {
-  const query = form.getQueries();
-  const keys = form.getKeys();
-  const validations = allValidations();
+const input = (formData) => {
+  const details = {};
   process.stdin.setEncoding('utf8');
   let count = 0;
-  console.log(query[count]);
+  let field = formData[count];
+  console.log(field.query);
   process.stdin.on('data', (chunk) => {
-    if (validations[keys[count]](chunk)) {
-      form.setValues(keys[count], chunk);
+    if (field.validator(chunk)) {
+      details[field.filed] = chunk;
       count++;
     }
-    console.log(query[count]);
-    if (count === 4) {
-      form.write();
+    field = formData[count];
+    console.log(field?.query);
+    if (count === 6) {
+      writeFile(details);
       console.log('thank you');
       process.exit();
     }
@@ -78,5 +42,17 @@ const input = (form) => {
 
 };
 
-const form = new Form();
-input(form);
+const formData = [
+  { field: 'name', query: 'Enter name', validator: validateName },
+  { field: 'DOB', query: 'Enter DOB', validator: validateDOB },
+  { field: 'hobbies', query: 'Enter Hobbies', validator: validateHobbies },
+  {
+    field: 'phNo', query: 'Enter phone number',
+    validator: validatePhoneNumber
+  },
+  { field: 'addLine1', query: 'Enter Address', validator: validateHobbies },
+  { field: 'addLine2', query: 'Enter Address', validator: validateHobbies },
+
+];
+
+input(formData);
