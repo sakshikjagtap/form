@@ -24,7 +24,7 @@ class Form {
   getDetails() {
     const details = {};
     this.#fields.forEach(field => {
-      const [name, response] = field.getEntity();
+      const [name, response] = field.getEntry();
       details[name] = response;
     });
     return details;
@@ -41,12 +41,13 @@ const registerResponse = (form, response, logger, writeFile) => {
   } catch (err) {
     logger('Invalid response');
   }
+
   if (!form.isFilled()) {
     logger(form.getPrompt());
     return;
   }
   let { name, dob, hobbies } = form.getDetails();
-  if (hobbies !== undefined) {
+  if (hobbies) {
     hobbies = hobbies.split(',');
   }
   writeFile({ name, dob, hobbies });

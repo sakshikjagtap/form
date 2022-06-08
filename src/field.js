@@ -4,7 +4,7 @@ class Field {
   #validator;
   #response;
 
-  constructor(name, prompt, validator) {
+  constructor(name, prompt, validator = x => true) {
     this.#name = name;
     this.#prompt = prompt;
     this.#validator = validator;
@@ -23,7 +23,7 @@ class Field {
     this.#response = response;
   }
 
-  getEntity() {
+  getEntry() {
     return [this.#name, this.#response];
   }
 }
