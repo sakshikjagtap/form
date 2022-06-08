@@ -1,6 +1,3 @@
-/* eslint-disable no-console */
-const fs = require('fs');
-
 class Form {
   #formData;
   #details;
@@ -27,7 +24,7 @@ class Form {
 
   addField(fieldValue) {
     const field = this.#formData[this.#index];
-    this.#details[field.fieldName] = fieldValue;
+    this.#details[field.name] = fieldValue;
   }
 
   getDetails() {
@@ -39,25 +36,21 @@ class Form {
   }
 }
 
-const writeFile = (details) => {
-  fs.writeFileSync('./form.json', JSON.stringify(details));
-};
-
-const registerResponse = (form, response, logger) => {
+const registerResponse = (form, response, logger, writeFile) => {
   if (form.validateField(response)) {
     form.addField(response);
     form.nextField();
   }
-
   if (!form.isFilled()) {
     logger(form.getPrompt());
     return;
   }
-
-  writeFile(form.getDetails());
+  let { name, dob, hobbies } = form.getDetails();
+  if (hobbies !== undefined) {
+    hobbies = hobbies.split(',');
+  }
+  writeFile({ name, dob, hobbies });
   logger('thank you');
-  process.exit();
-
 };
 
 module.exports = { Form, registerResponse };

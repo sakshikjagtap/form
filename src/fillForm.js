@@ -1,9 +1,15 @@
-/* eslint-disable no-console */
+const fs = require('fs');
+
 const { Form, registerResponse } = require('./form.js');
 
 const isNameValid = (name) => /^[a-z]{4,}/.test(name);
 const isDOBValid = (birthDate) => /\d{2}-\d{2}-\d{2}/.test(birthDate);
 const isDetailPresent = (detail) => detail.length > 0;
+
+const writeFile = (details) => {
+  fs.writeFileSync('./form.json', JSON.stringify(details));
+  process.stdin.destroy();
+};
 
 const main = () => {
   const formData = [
@@ -17,7 +23,7 @@ const main = () => {
 
   console.log(form.getPrompt());
   process.stdin.on('data', (response) => {
-    registerResponse(form, response, console.log);
+    registerResponse(form, response.trim(), console.log, writeFile);
   });
 };
 
