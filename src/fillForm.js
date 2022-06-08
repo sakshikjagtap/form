@@ -24,7 +24,10 @@ const main = () => {
   process.stdin.setEncoding('utf8');
   console.log(form.getPrompt());
   process.stdin.on('data', (response) => {
-    registerResponse(form, response.trim(), console.log, writeFile);
+    const chunks = response.trim().split('\n');
+    chunks.forEach(chunk => {
+      registerResponse(form, chunk, console.log, writeFile);
+    });
   });
 };
 

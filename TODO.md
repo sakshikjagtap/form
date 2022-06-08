@@ -1,10 +1,10 @@
 ## TODO
 
-- [ ] write test for main 
 - [ ] write test for multiLineField
 
 ## DONE
 
+- [x] write test for main 
 - [x] Implement multiline field for address
 - [x] remove domain knowledge from registerResponse
 - [x] provide parser to field 
