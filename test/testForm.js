@@ -1,26 +1,25 @@
 const { Form, registerResponse } = require('../src/form.js');
+const { Field } = require('../src/field.js');
 const assert = require('assert');
 
 const identity = content => content;
+
 describe('registerResponse', () => {
   it('Should give next prompt', () => {
-    const formData = [
-      { name: 'name', query: 'Enter name', validator: identity },
-      { name: 'dob', query: 'Enter dob', validator: identity }
-    ];
-    const form = new Form(formData);
+    const nameField = new Field('name', 'Enter name', identity);
+    const dobField = new Field('dob', 'Enter dob', identity);
+    const form = new Form([nameField, dobField]);
     const display = [];
     const logger = content => display.push(content);
     const response = 'sakshi';
 
-    registerResponse(form, response, logger);
+    registerResponse(form, response, logger, identity);
     assert.deepStrictEqual(display, ['Enter dob']);
   });
 
   it('Should write data into file', () => {
-    const formData = [
-      { name: 'name', query: 'Enter name', validator: identity },
-    ];
+    const nameField = new Field('name', 'Enter name', identity);
+    const form = new Form([nameField]);
 
     const form = new Form(formData);
     const display = [];
@@ -29,6 +28,6 @@ describe('registerResponse', () => {
     const response = 'sakshi';
 
     registerResponse(form, response, logger, writeFile);
-    assert.deepStrictEqual(display, [{ name: 'sakshi' }]);
+    assert.deepStrictEqual(display, [{ name: 'sakshi', dob: undefined, hobbies: undefined }]);
   });
 });

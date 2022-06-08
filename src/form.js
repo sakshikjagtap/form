@@ -1,38 +1,42 @@
 class Form {
-  #formData;
-  #details;
+  #fields;
   #index;
 
-  constructor(formData) {
-    this.#formData = formData;
-    this.#details = {};
+  constructor(fields) {
+    this.#fields = fields;
     this.#index = 0;
   }
 
   getPrompt() {
-    return this.#formData[this.#index].query;
+    const currentField = this.#fields[this.#index];
+    return currentField.getPrompt();
   }
 
-  validateField(fieldValue) {
-    const field = this.#formData[this.#index];
-    return field.validator(fieldValue);
+  validateField(response) {
+    const currentField = this.#fields[this.#index];
+    return currentField.isValid(response);
   }
 
   nextField() {
     this.#index++;
   }
 
-  addField(fieldValue) {
-    const field = this.#formData[this.#index];
-    this.#details[field.name] = fieldValue;
+  addField(response) {
+    const currentField = this.#fields[this.#index];
+    currentField.addField(response);
   }
 
   getDetails() {
-    return this.#details;
+    const details = {};
+    this.#fields.forEach(field => {
+      const [name, response] = field.getEntity();
+      details[name] = response;
+    });
+    return details;
   }
 
   isFilled() {
-    return this.#index === this.#formData.length;
+    return this.#index === this.#fields.length;
   }
 }
 
