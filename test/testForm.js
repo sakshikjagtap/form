@@ -30,7 +30,7 @@ describe('registerResponse', () => {
     assert.deepStrictEqual(display, [{ name: 'sakshi', dob: undefined, hobbies: undefined }]);
   });
 
-  it('should give same prompt if field is not valid', () => {
+  it('should give invalid field error if field is not valid', () => {
     const moreThan5 = response => response > 5;
     const nameField = new Field('name', 'Enter name', moreThan5);
     const form = new Form([nameField]);
@@ -40,7 +40,7 @@ describe('registerResponse', () => {
     const response = 'abin';
 
     registerResponse(form, response, logger, identity);
-    assert.deepStrictEqual(display, ['Enter name']);
+    assert.deepStrictEqual(display, ['Invalid response', 'Enter name']);
   });
 
 });

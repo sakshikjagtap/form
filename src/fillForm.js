@@ -3,7 +3,7 @@ const { Form, registerResponse } = require('./form.js');
 const { Field } = require('./field.js');
 
 const nameValidator = (name) => name.length >= 5;
-const dobValidator = (birthDate) => /\d{2}-\d{2}-\d{2}/.test(birthDate);
+const dobValidator = (birthDate) => /^\d{4}-\d{2}-\d{2}$/.test(birthDate);
 const nonEmpty = (detail) => detail.length > 0;
 
 const writeFile = (details) => {

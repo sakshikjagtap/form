@@ -12,18 +12,13 @@ class Form {
     return currentField.getPrompt();
   }
 
-  validateField(response) {
-    const currentField = this.#fields[this.#index];
-    return currentField.isValid(response);
-  }
-
-  nextField() {
-    this.#index++;
-  }
-
   addField(response) {
     const currentField = this.#fields[this.#index];
+    if (!currentField.isValid(response)) {
+      throw new Error('Invalid response');
+    }
     currentField.addField(response);
+    this.#index++;
   }
 
   getDetails() {
@@ -41,9 +36,10 @@ class Form {
 }
 
 const registerResponse = (form, response, logger, writeFile) => {
-  if (form.validateField(response)) {
+  try {
     form.addField(response);
-    form.nextField();
+  } catch (err) {
+    logger('Invalid response');
   }
   if (!form.isFilled()) {
     logger(form.getPrompt());
