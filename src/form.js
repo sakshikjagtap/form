@@ -1,3 +1,5 @@
+const { Field } = require('./field.js');
+
 class Form {
   #fields;
   #index;
@@ -18,7 +20,9 @@ class Form {
       throw new Error('Invalid response');
     }
     currentField.addField(response);
-    this.#index++;
+    if (currentField.isFilled()) {
+      this.#index++;
+    }
   }
 
   getDetails() {

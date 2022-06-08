@@ -1,20 +1,24 @@
-class Field {
+class MultiLineField {
   #name;
   #prompt;
   #validator;
-  #response;
+  #responses;
   #parse;
+  #index;
 
   constructor(name, prompt, validator = x => true, parse = x => x) {
     this.#name = name;
     this.#prompt = prompt;
     this.#validator = validator;
-    this.#response = null;
+    this.#responses = [];
     this.#parse = parse;
+    this.#index = 0;
   }
 
   getPrompt() {
-    return this.#prompt;
+    const prompt = this.#prompt[this.#index];
+    this.#index++;
+    return prompt;
   }
 
   isValid(response) {
@@ -22,16 +26,15 @@ class Field {
   }
 
   addField(response) {
-    this.#response = response;
+    this.#responses.push(response);
   }
 
   getEntry() {
-    return [this.#name, this.#parse(this.#response)];
+    return [this.#name, this.#parse(this.#responses).join('\n')];
   }
-
   isFilled() {
-    return this.#response !== null;
+    return this.#prompt.length === this.#responses.length;
   }
 }
 
-module.exports = { Field };
+module.exports = { MultiLineField };
