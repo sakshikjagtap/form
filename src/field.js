@@ -3,12 +3,14 @@ class Field {
   #prompt;
   #validator;
   #response;
+  #parse;
 
-  constructor(name, prompt, validator = x => true) {
+  constructor(name, prompt, validator = x => true, parse = x => x) {
     this.#name = name;
     this.#prompt = prompt;
     this.#validator = validator;
     this.#response = null;
+    this.#parse = parse;
   }
 
   getPrompt() {
@@ -24,7 +26,7 @@ class Field {
   }
 
   getEntry() {
-    return [this.#name, this.#response];
+    return [this.#name, this.#parse(this.#response)];
   }
 }
 

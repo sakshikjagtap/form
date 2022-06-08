@@ -27,7 +27,7 @@ describe('registerResponse', () => {
     const response = 'sakshi';
 
     registerResponse(form, response, logger, writeFile);
-    assert.deepStrictEqual(filledForm, [{ name: 'sakshi', dob: undefined, hobbies: undefined }]);
+    assert.deepStrictEqual(filledForm, [{ name: 'sakshi' }]);
   });
 
   it('should give invalid field error if field is not valid', () => {

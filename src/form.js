@@ -35,7 +35,7 @@ class Form {
   }
 }
 
-const registerResponse = (form, response, logger, writeFile) => {
+const registerResponse = (form, response, logger, callback) => {
   try {
     form.addField(response);
   } catch (err) {
@@ -46,11 +46,7 @@ const registerResponse = (form, response, logger, writeFile) => {
     logger(form.getPrompt());
     return;
   }
-  let { name, dob, hobbies } = form.getDetails();
-  if (hobbies) {
-    hobbies = hobbies.split(',');
-  }
-  writeFile({ name, dob, hobbies });
+  callback(form.getDetails());
   logger('thank you');
 };
 
