@@ -1,5 +1,3 @@
-const { Field } = require('./field.js');
-
 class Form {
   #fields;
   #index;

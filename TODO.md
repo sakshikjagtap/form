@@ -1,9 +1,10 @@
 ## TODO
-
 - [ ] write test for multiLineField
 
 ## DONE
 
+- [x] move helper functions to lib
+- [x] move validation functions to other file 
 - [x] write test for main 
 - [x] Implement multiline field for address
 - [x] remove domain knowledge from registerResponse

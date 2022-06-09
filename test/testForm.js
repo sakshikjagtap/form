@@ -45,38 +45,38 @@ describe('registerResponse', () => {
 });
 
 describe('Form', () => {
-  it('should return prompt for name', () => {
-    const nameField = new Field('name', 'Enter name');
-    const form = new Form([nameField]);
-    assert.strictEqual(form.getPrompt(), 'Enter name');
+  describe('#getPrompt', () => {
+    it('should return prompt for name', () => {
+      const nameField = new Field('name', 'Enter name');
+      const form = new Form([nameField]);
+      assert.strictEqual(form.getPrompt(), 'Enter name');
+    });
   });
 
-  it('should return second prompt', () => {
-    const nameField = new Field('name', 'Enter name');
-    const dobField = new Field('dob', 'Enter dob');
-    const form = new Form([nameField, dobField]);
-    form.addField('sakshi')
-    assert.strictEqual(form.getPrompt(), 'Enter dob');
+  describe('#addField', () => {
+    it('should throw an error if response is invalid', () => {
+      const moreThan5 = response => response.length > 5;
+      const nameField = new Field('name', 'Enter name', moreThan5);
+      const form = new Form([nameField]);
+      assert.throws(() => form.addField('abin'), new Error('Invalid response'));
+    });
   });
 
-  it('should throw an error if response is invalid', () => {
-    const moreThan5 = response => response.length > 5;
-    const nameField = new Field('name', 'Enter name', moreThan5);
-    const form = new Form([nameField]);
-    assert.throws(() => form.addField('abin'));
+  describe('#getDetails', () => {
+    it('should give all the details of form', () => {
+      const nameField = new Field('name', 'Enter name');
+      const form = new Form([nameField]);
+      form.addField('sakshi');
+      assert.deepStrictEqual(form.getDetails(), { name: 'sakshi' });
+    });
   });
 
-  it('should give all the details of form', () => {
-    const nameField = new Field('name', 'Enter name');
-    const form = new Form([nameField]);
-    form.addField('sakshi');
-    assert.deepStrictEqual(form.getDetails(), { name: 'sakshi' });
-  });
-
-  it('should give true if all the fields are filled', () => {
-    const nameField = new Field('name', 'Enter name');
-    const form = new Form([nameField]);
-    form.addField('sakshi');
-    assert.deepStrictEqual(form.isFilled(), true);
+  describe('#isFilled', () => {
+    it('should give true if all the fields are filled', () => {
+      const nameField = new Field('name', 'Enter name');
+      const form = new Form([nameField]);
+      form.addField('sakshi');
+      assert.deepStrictEqual(form.isFilled(), true);
+    });
   });
 });
